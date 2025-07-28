@@ -5,18 +5,21 @@
     <meta charset="UTF-8">
     <title>TheraSource - Upload PDF & CSV</title>
     <style>
+        /* Base page styling */
         body {
             font-family: Arial, sans-serif;
             padding: 40px;
             font-size: 2rem; 
         }
 
+        /* Label styling */
         label {
             font-weight: bold;
             display: block;
             margin-top: 20px;
         }
 
+        /* Input and textarea styling */
         input[type="file"],
         textarea {
             font-size: 1.5rem;
@@ -25,6 +28,7 @@
             width: 100%;
         }
 
+        /* Button styling */
         button {
             font-size: 2rem;
             padding: 20px 40px;
@@ -32,6 +36,7 @@
             cursor: pointer;
         }
 
+        /* Output box styling */
         #output {
             margin-top: 50px;
             white-space: pre-wrap;
@@ -42,6 +47,7 @@
             font-size: 1.8rem;
         }
 
+        /* Error message styling */
         .error {
             color: red;
             font-weight: bold;
@@ -49,8 +55,10 @@
     </style>
 </head>
 <body>
+    <!-- Page heading -->
     <h1 style="font-size: 3rem;">TheraSource: Upload Therapy Chapter and Dialogue</h1>
 
+    <!-- File upload form for PDF and CSV -->
     <form id="upload-form" enctype="multipart/form-data">
         <label for="pdf">Therapy Chapter PDF:</label>
         <input type="file" name="pdf" accept=".pdf" required>
@@ -61,25 +69,29 @@
         <button type="submit">Generate</button>
     </form>
 
+    <!-- Output area for feedback -->
     <h2 style="font-size: 2.5rem;">Generated Dialogue (CSV Download):</h2>
     <div id="output">Waiting for result...</div>
 
     <script>
+      // Handle form submission with JavaScript
       document.getElementById("upload-form").addEventListener("submit", async function(e) {
           e.preventDefault();
-  
+
           const form = e.target;
           const formData = new FormData(form);
           const output = document.getElementById("output");
           output.textContent = "Loading...";
-  
+
           try {
+              // Send files to /generate endpoint via POST
               const response = await fetch("/generate", {
                   method: "POST",
                   body: formData,
               });
-  
+
               if (response.ok) {
+                  // On success: download generated CSV file
                   const blob = await response.blob();
                   const downloadUrl = URL.createObjectURL(blob);
                   const link = document.createElement("a");
@@ -90,10 +102,12 @@
                   document.body.removeChild(link);
                   output.textContent = "Download started: generated_dialogue.csv";
               } else {
+                  // If server returns an error message
                   const data = await response.json();
                   output.textContent = data.response || "Failed to generate.";
               }
           } catch (err) {
+              // Handle network or client-side errors
               output.innerHTML = `<span class="error">Client Error: ${err.message}</span>`;
               console.error(err);
           }
