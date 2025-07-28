@@ -14,7 +14,7 @@ This tool supports mental health research and education by generating synthetic 
 
 ## 🚀 Getting Started
 
-### 🔗 Option: Run Colab Notebook as Backend (Recommended)
+### 🔗 Run Colab Notebook as Backend
 
 > Use this if you want to test the app quickly using free GPU on Colab.
 
