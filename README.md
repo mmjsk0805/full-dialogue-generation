@@ -151,6 +151,16 @@ inputs = tokenizer(prompt, return_tensors="pt").to("cpu")
 
 ---
 
+## ⚠️ Compatibility Disclaimer
+
+This project was developed and tested on a specific machine (with a compatible GPU and environment). While every effort was made to ensure the code is portable and well-structured, **I cannot guarantee it will work perfectly on other systems without modification**.
+
+The main goal of this repository is to **demonstrate the logic, structure, and workflow** of an AI-powered therapeutic dialogue generator. I’ve included all supporting scripts, models, and a Colab notebook to make the project as reproducible as possible.
+
+If you encounter issues running the code on your machine, feel free to open an issue or contact me — I’d be happy to help or clarify.
+
+---
+
 ## 📜 License
 
 MIT License  
