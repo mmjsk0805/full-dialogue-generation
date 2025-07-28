@@ -67,7 +67,7 @@ This will allow your server to be publicly accessible via a temporary `ngrok` UR
 
    - Load the model
    - Start a Flask API server
-   - Print an `ngrok` URL like `https://abc123.ngrok.io`
+   - Print an `ngrok` URL like `https://abc123.ngrok-free.app`
 
 3. Copy that URL and paste it into both of the following files in your local repo:
 
@@ -75,7 +75,7 @@ This will allow your server to be publicly accessible via a temporary `ngrok` UR
    - `generate.py`
 
    ```python
-   LLM_ENDPOINT = "https://abc123.ngrok.io"
+   LLM_ENDPOINT = "https://abc123.ngrok-free.app/generate"
    ```
 
 4. In your local terminal:
