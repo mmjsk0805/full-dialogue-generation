@@ -1,67 +1,97 @@
 # 🧠 AI-Powered Therapy Dialogue Generator
 
-This is a full-stack Flask web application that uses the `meta-llama/Llama-3.1-8B-Instruct` model to generate realistic, empathetic therapy dialogues. Users upload a therapy guide chapter (PDF) and a starter dialogue (CSV). The app returns a complete conversation in downloadable CSV format.
+[![Run in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mmjsk0805/full-dialogue-generation/blob/main/llama3_server.ipynb)
+
+A full-stack Flask web application and Google Colab-compatible notebook powered by the `meta-llama/Llama-3.1-8B-Instruct` model. This project generates full, realistic therapy dialogues based on expert-authored chapters and partial conversations.
 
 ---
 
-## 🚀 Demo (Colab + GPU Compatible)
+## 📌 Project Overview
 
-### Try It on Colab:
+This tool supports mental health research and education by generating synthetic therapist–patient conversations. Given a therapy guide (PDF) and a starter dialogue (CSV), it completes the session with alternating, empathetic lines between the two roles. It’s ideal for psychologists, AI researchers, and instructors experimenting with AI in therapeutic contexts.
 
-1. Upload the following files:
+---
+
+## 🚀 Getting Started
+
+### 🖥️ Option 1: Run Locally (GPU Required)
+
+> For users who want a full-featured local Flask app with model inference.
+
+```bash
+# Set up virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the Flask server
+python run.py
+```
+
+Then open `http://127.0.0.1:5000` in your browser to use the app.
+
+---
+
+### 🔗 Option 2: [Run in Google Colab](https://colab.research.google.com/github/mmjsk0805/full-dialogue-generation/blob/main/llama3_server.ipynb)
+
+> For quick testing using GPU in the cloud.
+
+#### Instructions:
+
+1. Open the notebook `llama3_server.ipynb` in Colab.
+2. Upload the following files:
    - `run.py`
    - `generate.py`
    - `templates/index.html`
-2. Install dependencies:
+3. Install required packages:
    ```bash
    pip install flask transformers accelerate PyPDF2 pandas pyngrok
    ```
-3. Run the server:
+4. Run the server:
    ```bash
    python run.py
    ```
-4. Open the printed `ngrok` URL to access the web app.
+5. Open the generated `ngrok` link to access the web interface.
 
 ---
 
-## 🧰 Tech Stack
-
-- **Frontend**: HTML (file upload interface)
-- **Backend**: Flask, PyTorch, Hugging Face Transformers
-- **Model**: [`meta-llama/Llama-3.1-8B-Instruct`](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
-- **Libraries**: `transformers`, `torch`, `flask`, `PyPDF2`, `pandas`, `pyngrok`
-
----
-
-## 📁 File Structure
+## 📁 Project Structure
 
 ```
 .
-├── run.py
-├── generate.py
+├── run.py                   # Starts Flask server
+├── generate.py             # Model interaction and prompt generation
+├── extract_dialogue.py     # Optional CSV post-processing
+├── llama3_server.ipynb     # Colab notebook interface
 ├── templates/
-│   └── index.html
-├── outputs/
-│   └── generated_dialogue.csv
+│   └── index.html          # File upload UI
+├── dialogues/              # Sample input CSVs
+├── outputs/                # Generated CSVs
+├── models/                 # Saved models (optional)
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 📄 How It Works
+## 📄 About `llama3_server.ipynb`
 
-1. Upload a **therapy chapter** as a `.pdf`
-2. Upload a **starter dialogue** as a `.csv` with two columns: `Patient`, `Therapist`
-3. The backend constructs a prompt using both files
-4. The LLaMA model generates the rest of the conversation
-5. The generated conversation is parsed and returned as a `.csv` file
+This Colab notebook provides an interactive environment to:
+
+- Load the LLaMA 3.1 Instruct model from Hugging Face
+- Accept user-uploaded PDFs and CSVs
+- Construct a prompt and generate realistic dialogue
+- Return results as a downloadable CSV
+
+It’s ideal for GPU-powered experimentation or demonstrations without setting up a full backend.
 
 ---
 
-## 🧠 Prompt Template
+## 🧠 Prompt Design
 
-```
+```text
 You are a professional therapist. Based on the following therapy guide and ongoing dialogue, continue the conversation empathetically and realistically.
 
 --- Therapy Guide ---
@@ -75,24 +105,26 @@ You are a professional therapist. Based on the following therapy guide and ongoi
 
 ---
 
-## 📎 Example Input
+## 📥 Input Formats
 
-**CSV Format:**
+### 🗂️ Therapy Guide (PDF)
+
+Upload any chapter or section from a professional therapy guide.
+
+### 💬 Starter Dialogue (CSV)
+
+CSV with `Patient` and `Therapist` columns:
 
 ```csv
 Patient,Therapist
 I just feel stuck lately.,That's totally understandable. What's been going on?
 ```
 
-**PDF Format:**
-
-- Any therapy-related chapter or guide, e.g., "Section 5: Enhancing Motivation"
-
 ---
 
-## 📥 Output Format
+## 📤 Output Format
 
-The result is saved and returned as a CSV:
+Generated CSV:
 
 ```csv
 Patient,Therapist
@@ -103,30 +135,15 @@ Mostly when I wake up.,That’s a common trigger—how do your mornings start?
 
 ---
 
-## 🖥️ Local Usage (Optional)
+## ⚙️ CUDA vs CPU Settings
 
-> For GPU users only (CUDA-enabled environment required)
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python run.py
-```
-
-Visit `http://127.0.0.1:5000` in your browser.
-
----
-
-## ⚙️ CUDA Note for Colab or CPU-only Environments
-
-If you're running on Colab without GPU support, update this line:
+If you're using a **GPU**, make sure this is in your model call:
 
 ```python
 inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
 ```
 
-To:
+If you're on **CPU-only environments** (like non-GPU Colab), change to:
 
 ```python
 inputs = tokenizer(prompt, return_tensors="pt").to("cpu")
@@ -134,7 +151,7 @@ inputs = tokenizer(prompt, return_tensors="pt").to("cpu")
 
 ---
 
-## 📄 License
+## 📜 License
 
 MIT License  
 © 2025 [Jaden Moon](https://github.com/mmjsk0805)
